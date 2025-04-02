@@ -6,14 +6,10 @@ namespace L02P02_2022CP602_2022HZ651.Models
     public class pedido_detalle
     {
         [Key]
-        public int Id { get; set; }
-        public int IdPedido { get; set; }
-        public int IdLibro { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-
-        public int PedidoEncabezado { get; set; }
-
-        public int Libro { get; set; }
+        public int id { get; set; }
+        public int id_pedido { get; set; }
+        public int id_libro { get; set; }
+        public DateTime created_at { get; set; } 
 
     }
 }

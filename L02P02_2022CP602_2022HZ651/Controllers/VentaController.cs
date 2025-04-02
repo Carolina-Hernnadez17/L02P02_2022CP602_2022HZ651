@@ -33,13 +33,13 @@ namespace L02P02_2022CP602_2022HZ651.Controllers
                         _context.Clientes.Add(cliente);
                         await _context.SaveChangesAsync();
 
-                        // Crear pedido con estado 'P' (En Proceso)
+                        // Crear pedido con estado 'p' (En Proceso)
                         var nuevoPedido = new pedido_encabezado
                         {
                             id_Cliente = cliente.Id,
                             cantidad_libros = 0,
                             total = 0,
-                            Estado = "P"
+                            Estado = 'p' // Tipo char
                         };
 
                         _context.pedido_encabezado.Add(nuevoPedido);
@@ -49,7 +49,7 @@ namespace L02P02_2022CP602_2022HZ651.Controllers
                         await transaction.CommitAsync();
 
                         TempData["Mensaje"] = "Venta iniciada exitosamente.";
-                        return RedirectToAction("ListadoLibros", new { pedidoId = nuevoPedido.Id });
+                        return RedirectToAction("DetalleVenta", "DetalleVenta");
                     }
                     catch (Exception ex)
                     {
