@@ -46,7 +46,7 @@ namespace L02P02_2022CP602_2022HZ651.Controllers
         public IActionResult CompletarCompra()
         {
             carrito.Clear();
-            return RedirectToAction("ProcesoVenta", "Venta");
+            return RedirectToAction("CerrarVentana", "CerrarVentana");
         }
     }
 }

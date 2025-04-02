@@ -1,0 +1,55 @@
+﻿@model dynamic
+
+@{
+    ViewData["Title"] = "Cerrar Venta";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="cliente-info">
+    <h3>Información del Cliente</h3>
+    <p><strong>Nombre:</strong> @Model.cliente.nombre @Model.cliente.apellido</p>
+    <p><strong>Email:</strong> @Model.cliente.email</p>
+    <p><strong>Dirección:</strong> @Model.cliente.direccion</p>
+</div>
+
+@if (Model.pedidoEncabezado != null)
+{
+    <div class="pedido-info">
+        <h3>Encabezado del Pedido</h3>
+        <p><strong>ID Pedido:</strong> @Model.pedidoEncabezado.id</p>
+        <p><strong>Cantidad de Libros:</strong> @Model.pedidoEncabezado.cantidad_libros</p>
+        <p><strong>Total del Pedido:</strong> $@Model.pedidoEncabezado.total</p>
+    </div>
+
+    <div class="pedido-detalle">
+        <h3>Detalles del Pedido</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID Libro</th>
+                    <th>Fecha de Pedido</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var detalle in Model.pedidosDetalle)
+                {
+                    <tr>
+                        <td>@detalle.id_libro</td>
+                        <td>@detalle.created_at.ToString("dd/MM/yyyy HH:mm")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        No se encontraron pedidos para este cliente.
+    </div>
+}
+
+<div class="actions">
+    <a href="@Url.Action("IniciarVenta", "Venta")" class="btn btn-primary">Volver al Inicio</a>
+</div>
