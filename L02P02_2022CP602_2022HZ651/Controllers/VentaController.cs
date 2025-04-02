@@ -48,7 +48,7 @@ namespace L02P02_2022CP602_2022HZ651.Controllers
         // Mostrar lista de libros disponibles
         public async Task<IActionResult> ListadoLibros(int pedidoId)
         {
-            var libros = await _context.Libros.Include(l => l.Autor).Include(l => l.Categoria).ToListAsync();
+            var libros = await _context.Libros.Include(l => l.id_autor).Include(l => l.id).ToListAsync();
             ViewBag.PedidoId = pedidoId;
             return View(libros);
         }

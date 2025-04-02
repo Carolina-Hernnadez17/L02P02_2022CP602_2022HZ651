@@ -1,0 +1,62 @@
+﻿@model List<L02P02_2022CP602_2022HZ651.Models.Libros>
+
+@{
+    ViewData["Title"] = "Venta de Libros";
+}
+
+<div class="container mt-4">
+    <div class="text-center bg-dark text-white p-4 rounded">
+        <h2>Venta de Libros</h2>
+        <p>Seleccione los libros y posteriormente ingrese sus datos</p>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <h4 class="text-primary">Libros</h4>
+            <table class="table table-bordered">
+                <tbody>
+                    @foreach (var libro in Model)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@libro.nombre</strong><br />
+                                <small>@libro.descripcion</small>
+                            </td>
+                            <td>$@libro.Precio</td>
+                            <td>
+                                <button class="btn btn-success agregar-carrito" data-id="@libro.id" data-precio="@libro.Precio">+ Agregar</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-4">
+            <h4 class="text-primary">Total Libros</h4>
+            <div class="card p-3">
+                <p><strong>Total (USD):</strong> $<span id="totalPrecio">0</span></p>
+                <button id="completarCompra" class="btn btn-primary" disabled>Completar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let totalLibros = 0;
+    let totalPrecio = 0;
+
+    document.querySelectorAll(".agregar-carrito").forEach(button => {
+        button.addEventListener("click", function () {
+            let precio = parseFloat(this.getAttribute("data-precio"));
+            totalLibros++;
+            totalPrecio += precio;
+            document.getElementById("totalPrecio").innerText = totalPrecio.toFixed(2);
+            document.getElementById("completarCompra").disabled = false;
+        });
+    });
+
+    document.getElementById("completarCompra").addEventListener("click", function () {
+        window.location.href = "/Venta/Completar";
+    });
+</script>
