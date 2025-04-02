@@ -1,12 +1,13 @@
 ﻿using L02P02_2022CP602_2022HZ651.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Threading.Tasks;
 
 namespace L02P02_2022CP602_2022HZ651.Controllers
 {
     public class VentaController : Controller
     {
-
         private readonly LibreriaContext _context;
 
         public VentaController(LibreriaContext context)
@@ -14,7 +15,6 @@ namespace L02P02_2022CP602_2022HZ651.Controllers
             _context = context;
         }
 
-        // Iniciar una nueva venta con datos del cliente
         public IActionResult IniciarVenta()
         {
             return View();
@@ -25,87 +25,45 @@ namespace L02P02_2022CP602_2022HZ651.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Clientes.Add(cliente);
-                await _context.SaveChangesAsync();
-
-                var nuevoPedido = new pedido_encabezado
+                try
                 {
-                    IdCliente = cliente.Id,
-                    CantidadLibros = 0,
-                    Total = 0,
-                    Estado = 'P'
-                };
+                    _context.Clientes.Add(cliente);
+                    await _context.SaveChangesAsync();
 
-                _context.pedido_encabezado.Add(nuevoPedido);
-                await _context.SaveChangesAsync();
+                    if (cliente.Id <= 0)
+                    {
+                        ModelState.AddModelError("", "No se pudo guardar el cliente.");
+                        return View(cliente);
+                    }
 
-                return RedirectToAction("ListadoLibros", new { pedidoId = nuevoPedido.Id });
+                    var nuevoPedido = new pedido_encabezado
+                    {
+                        IdCliente = cliente.Id,
+                        CantidadLibros = 0,
+                        Total = 0,
+                        Estado = 'P'
+                    };
+
+                    _context.pedido_encabezado.Add(nuevoPedido);
+                    await _context.SaveChangesAsync();
+
+                    TempData["Mensaje"] = "Venta iniciada exitosamente.";
+
+                    return RedirectToAction("ListadoLibros", new { pedidoId = nuevoPedido.Id });
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Error al iniciar la venta: " + ex.Message);
+                }
             }
-
             return View(cliente);
         }
 
-        // Mostrar lista de libros disponibles
         public async Task<IActionResult> ListadoLibros(int pedidoId)
         {
-            var libros = await _context.Libros.Include(l => l.id_autor).Include(l => l.id).ToListAsync();
+            var libros = await _context.Libros.ToListAsync();
             ViewBag.PedidoId = pedidoId;
             return View(libros);
         }
-
-        // Agregar un libro a un pedido
-        [HttpPost]
-        public async Task<IActionResult> AgregarLibro(int pedidoId, int libroId)
-        {
-            var pedido = await _context.pedido_encabezado.FindAsync(pedidoId);
-            var libro = await _context.Libros.FindAsync(libroId);
-
-            if (pedido != null && libro != null)
-            {
-                var detalle = new pedido_detalle
-                {
-                    IdPedido = pedidoId,
-                    IdLibro = libroId,
-                    CreatedAt = DateTime.Now
-                };
-
-                _context.pedido_detalle.Add(detalle);
-                pedido.CantidadLibros++;
-                pedido.Total += libro.Precio;
-                await _context.SaveChangesAsync();
-            }
-
-            return RedirectToAction("ListadoLibros", new { pedidoId });
-        }
-
-        // Mostrar resumen de la venta antes de cerrar
-        public async Task<IActionResult> CierreVenta(int pedidoId)
-        {
-            var pedido = await _context.pedido_encabezado
-                .Include(p => p.Cliente)
-                .FirstOrDefaultAsync(p => p.Id == pedidoId);
-
-            if (pedido == null)
-                return NotFound();
-
-            return View(pedido);
-        }
-
-        // Cerrar la venta
-        [HttpPost]
-        public async Task<IActionResult> CerrarVenta(int pedidoId)
-        {
-            var pedido = await _context.pedido_encabezado.FindAsync(pedidoId);
-
-            if (pedido == null)
-                return NotFound();
-
-            pedido.Estado = 'C'; 
-            await _context.SaveChangesAsync();
-            ViewBag.Mensaje = "Venta cerrada con éxito.";
-
-            return View("CierreVenta", pedido);
-        }
     }
 }
-
