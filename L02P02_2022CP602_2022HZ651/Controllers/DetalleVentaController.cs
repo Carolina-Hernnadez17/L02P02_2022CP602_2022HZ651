@@ -41,7 +41,6 @@ namespace L02P02_2022CP602_2022HZ651.Controllers
         [HttpPost]
         public IActionResult CompletarCompra()
         {
-            // Aquí se puede procesar la compra y guardar en la base de datos
             carrito.Clear(); // Vaciar el carrito después de la compra
             return RedirectToAction("ProcesoVenta", "Venta");
         }

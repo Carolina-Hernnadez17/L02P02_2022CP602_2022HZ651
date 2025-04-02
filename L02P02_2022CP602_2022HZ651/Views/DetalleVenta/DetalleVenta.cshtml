@@ -33,7 +33,7 @@
         </div>
 
         <div class="col-md-4">
-            <h4 class="text-primary">Total Libros</h4>
+            <h4 class="text-primary">Total Libros <span id="totalLibros">0</span></h4>
             <div class="card p-3">
                 <p><strong>Total (USD):</strong> $<span id="totalPrecio">0</span></p>
                 <button id="completarCompra" class="btn btn-primary" disabled>Completar</button>
@@ -51,6 +51,7 @@
             let precio = parseFloat(this.getAttribute("data-precio"));
             totalLibros++;
             totalPrecio += precio;
+            document.getElementById("totalLibros").innerText = totalLibros;
             document.getElementById("totalPrecio").innerText = totalPrecio.toFixed(2);
             document.getElementById("completarCompra").disabled = false;
         });
