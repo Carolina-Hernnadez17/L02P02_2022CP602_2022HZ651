@@ -6,12 +6,11 @@ namespace L02P02_2022CP602_2022HZ651.Models
     public class pedido_encabezado
     {
         [Key]
-        public int Id { get; set; }
-        public int IdCliente { get; set; }
-        public int CantidadLibros { get; set; }
-        public decimal Total { get; set; }
+        public int id { get; set; }
+        public int id_Cliente { get; set; }
+        public int cantidad_libros { get; set; }
+        public decimal total { get; set; }
         public char Estado { get; set; } = 'P';
-        public Clientes Cliente { get; set; }
 
     }
 }

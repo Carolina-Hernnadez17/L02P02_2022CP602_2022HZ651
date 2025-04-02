@@ -38,9 +38,9 @@ namespace L02P02_2022CP602_2022HZ651.Controllers
 
                     var nuevoPedido = new pedido_encabezado
                     {
-                        IdCliente = cliente.Id,
-                        CantidadLibros = 0,
-                        Total = 0,
+                        id_Cliente = cliente.Id,
+                        cantidad_libros = 0,
+                        total = 0,
                         Estado = 'P'
                     };
 
@@ -49,7 +49,7 @@ namespace L02P02_2022CP602_2022HZ651.Controllers
 
                     TempData["Mensaje"] = "Venta iniciada exitosamente.";
 
-                    return RedirectToAction("ListadoLibros", new { pedidoId = nuevoPedido.Id });
+                    return RedirectToAction("ListadoLibros", new { pedidoId = nuevoPedido.id });
                 }
                 catch (Exception ex)
                 {
