@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace L02P02_2022CP602_2022HZ651.Models
 {
-    public class PedidoEncabezado
+    public class pedido_encabezado
     {
         [Key]
         public int Id { get; set; }
@@ -11,7 +11,7 @@ namespace L02P02_2022CP602_2022HZ651.Models
         public int CantidadLibros { get; set; }
         public decimal Total { get; set; }
         public char Estado { get; set; } = 'P';
-        public Cliente Cliente { get; set; }
+        public Clientes Cliente { get; set; }
 
     }
 }

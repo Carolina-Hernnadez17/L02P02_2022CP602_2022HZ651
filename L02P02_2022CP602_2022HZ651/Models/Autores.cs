@@ -2,7 +2,7 @@
 
 namespace L02P02_2022CP602_2022HZ651.Models
 {
-    public class Categoria
+    public class Autores
     {
         [Key]
         public int Id { get; set; }

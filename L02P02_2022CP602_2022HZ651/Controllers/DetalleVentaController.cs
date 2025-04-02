@@ -5,7 +5,7 @@ namespace L02P02_2022CP602_2022HZ651.Controllers
 {
     public class DetalleVentaController : Controller
     {
-        private static List<PedidoDetalle> carrito = new List<PedidoDetalle>();
+        private static List<pedido_detalle> carrito = new List<pedido_detalle>();
         private readonly LibreriaContext _context;
 
         public DetalleVentaController(LibreriaContext context)
@@ -28,7 +28,7 @@ namespace L02P02_2022CP602_2022HZ651.Controllers
                 return NotFound();
             }
 
-            var pedidoDetalle = new PedidoDetalle
+            var pedidoDetalle = new pedido_detalle
             {
                 IdLibro = libro.id,
                 IdPedido = 1, // Se debe cambiar por un ID de pedido real

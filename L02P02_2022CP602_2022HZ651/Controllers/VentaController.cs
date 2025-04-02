@@ -21,14 +21,14 @@ namespace L02P02_2022CP602_2022HZ651.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> IniciarVenta(Cliente cliente)
+        public async Task<IActionResult> IniciarVenta(Clientes cliente)
         {
             if (ModelState.IsValid)
             {
                 _context.Clientes.Add(cliente);
                 await _context.SaveChangesAsync();
 
-                var nuevoPedido = new PedidoEncabezado
+                var nuevoPedido = new pedido_encabezado
                 {
                     IdCliente = cliente.Id,
                     CantidadLibros = 0,
@@ -36,7 +36,7 @@ namespace L02P02_2022CP602_2022HZ651.Controllers
                     Estado = 'P'
                 };
 
-                _context.PedidosEncabezado.Add(nuevoPedido);
+                _context.pedido_encabezado.Add(nuevoPedido);
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction("ListadoLibros", new { pedidoId = nuevoPedido.Id });
@@ -57,19 +57,19 @@ namespace L02P02_2022CP602_2022HZ651.Controllers
         [HttpPost]
         public async Task<IActionResult> AgregarLibro(int pedidoId, int libroId)
         {
-            var pedido = await _context.PedidosEncabezado.FindAsync(pedidoId);
+            var pedido = await _context.pedido_encabezado.FindAsync(pedidoId);
             var libro = await _context.Libros.FindAsync(libroId);
 
             if (pedido != null && libro != null)
             {
-                var detalle = new PedidoDetalle
+                var detalle = new pedido_detalle
                 {
                     IdPedido = pedidoId,
                     IdLibro = libroId,
                     CreatedAt = DateTime.Now
                 };
 
-                _context.PedidosDetalle.Add(detalle);
+                _context.pedido_detalle.Add(detalle);
                 pedido.CantidadLibros++;
                 pedido.Total += libro.Precio;
                 await _context.SaveChangesAsync();
@@ -81,7 +81,7 @@ namespace L02P02_2022CP602_2022HZ651.Controllers
         // Mostrar resumen de la venta antes de cerrar
         public async Task<IActionResult> CierreVenta(int pedidoId)
         {
-            var pedido = await _context.PedidosEncabezado
+            var pedido = await _context.pedido_encabezado
                 .Include(p => p.Cliente)
                 .FirstOrDefaultAsync(p => p.Id == pedidoId);
 
@@ -95,7 +95,7 @@ namespace L02P02_2022CP602_2022HZ651.Controllers
         [HttpPost]
         public async Task<IActionResult> CerrarVenta(int pedidoId)
         {
-            var pedido = await _context.PedidosEncabezado.FindAsync(pedidoId);
+            var pedido = await _context.pedido_encabezado.FindAsync(pedidoId);
 
             if (pedido == null)
                 return NotFound();

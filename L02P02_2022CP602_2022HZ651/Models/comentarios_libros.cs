@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace L02P02_2022CP602_2022HZ651.Models
 {
-    public class ComentarioLibro
+    public class comentarios_libros
     {
         [Key]
         public int Id { get; set; }
