@@ -11,9 +11,9 @@ namespace L02P02_2022CP602_2022HZ651.Models
         public int IdLibro { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        public PedidoEncabezado PedidoEncabezado { get; set; }
+        public int PedidoEncabezado { get; set; }
 
-        public Libro Libro { get; set; }
+        public int Libro { get; set; }
 
     }
 }

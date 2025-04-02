@@ -13,9 +13,9 @@ namespace L02P02_2022CP602_2022HZ651.Models
         public decimal Precio { get; set; }
         public char Estado { get; set; }
         public int IdAutor { get; set; }
-        public Autor Autor { get; set; }
+        public int Autor { get; set; }
         public int IdCategoria { get; set; }
-        public Categoria Categoria { get; set; }
+        public int Categoria { get; set; }
 
     }
 }
