@@ -1,5 +1,6 @@
 ﻿using L02P02_2022CP602_2022HZ651.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
@@ -29,27 +30,39 @@ namespace L02P02_2022CP602_2022HZ651.Controllers
                 {
                     try
                     {
-                        // Guardar cliente en la BD
-                        _context.Clientes.Add(cliente);
-                        await _context.SaveChangesAsync();
+                        var connection = _context.Database.GetDbConnection();
+                        await connection.OpenAsync();
 
-                        // Crear pedido con estado 'p' (En Proceso)
-                        var nuevoPedido = new pedido_encabezado
+                        using (var command = connection.CreateCommand())
                         {
-                            id_Cliente = cliente.Id,
-                            cantidad_libros = 0,
-                            total = 0,
-                            Estado = 'p' // Tipo char
-                        };
+                            // Insertar Cliente y obtener el ID
+                            command.CommandText = @"
+                                INSERT INTO Clientes (Nombre, Apellido, Email, Direccion, CreatedAt) 
+                                OUTPUT INSERTED.Id
+                                VALUES (@Nombre, @Apellido, @Email, @Direccion, GETDATE())";
 
-                        _context.pedido_encabezado.Add(nuevoPedido);
-                        await _context.SaveChangesAsync();
+                            command.Parameters.Add(new SqlParameter("@Nombre", cliente.nombre));
+                            command.Parameters.Add(new SqlParameter("@Apellido", cliente.apellido));
+                            command.Parameters.Add(new SqlParameter("@Email", cliente.email));
+                            command.Parameters.Add(new SqlParameter("@Direccion", cliente.direccion));
 
-                        // Confirmar la transacción
+                            var clienteId = (int)await command.ExecuteScalarAsync();
+
+                            // Insertar Pedido
+                            command.CommandText = @"
+                                INSERT INTO pedido_encabezado (id_Cliente, cantidad_libros, total, Estado) 
+                                VALUES (@IdCliente, 0, 0, 'p')";
+
+                            command.Parameters.Clear();
+                            command.Parameters.Add(new SqlParameter("@IdCliente", clienteId));
+
+                            await command.ExecuteNonQueryAsync();
+                        }
+
                         await transaction.CommitAsync();
 
                         TempData["Mensaje"] = "Venta iniciada exitosamente.";
-                        return RedirectToAction("DetalleVenta", "DetalleVenta");
+                        return RedirectToAction("ListadoLibros");
                     }
                     catch (Exception ex)
                     {
