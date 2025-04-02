@@ -59,7 +59,7 @@ namespace L02P02_2022CP602_2022HZ651.Controllers
             return View(cliente);
         }
 
-        public async Task<IActionResult> ListadoLibros(int pedidoId)
+        public async Task<IActionResult> DetalleVenta(int pedidoId)
         {
             var libros = await _context.Libros.ToListAsync();
             ViewBag.PedidoId = pedidoId;

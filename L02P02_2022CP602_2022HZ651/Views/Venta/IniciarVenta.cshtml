@@ -1,16 +1,14 @@
 ﻿@model L02P02_2022CP602_2022HZ651.Models.Clientes
 
 @{
-    ViewData["Title"] = "Venta de Libros";
+    ViewData["Title"] = "Inicio de Venta";
 }
 
 <div class="container mt-5">
     <div class="text-center">
-        <img src="~/img/logo.png" alt="Logo" class="mb-3" width="100">
-        <h1 class="text-white bg-dark p-3">Venta de Libros</h1>
+        <h1 class="text-white bg-dark p-3">Iniciar Venta</h1>
     </div>
 
-    @* Si hay un mensaje en TempData, se muestra aquí *@
     @if (TempData["Mensaje"] != null)
     {
         <div class="alert alert-success">
@@ -19,8 +17,7 @@
     }
 
     <div class="card p-4 mt-3">
-        <h3 class="mb-3">Proceso de venta</h3>
-        <h5 class="mb-3">Datos del Cliente</h5>
+        <h3 class="mb-3">Datos del Cliente</h3>
 
         <form asp-action="IniciarVenta" asp-controller="Venta" method="post">
             <div class="row">
@@ -52,12 +49,3 @@
         </form>
     </div>
 </div>
-
-<footer class="bg-dark text-white text-center p-3 mt-4">
-    2025-01-04 - REBECA MARGARITA CRUZ POLANCO<br>
-    2025-01-04 - MIRIAN CAROLINA HERNANDEZ ZEPEDA
-</footer>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
