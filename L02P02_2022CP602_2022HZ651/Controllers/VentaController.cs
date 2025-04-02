@@ -35,7 +35,6 @@ namespace L02P02_2022CP602_2022HZ651.Controllers
 
                         using (var command = connection.CreateCommand())
                         {
-                            // Insertar Cliente y obtener el ID
                             command.CommandText = @"
                                 INSERT INTO Clientes (Nombre, Apellido, Email, Direccion, CreatedAt) 
                                 OUTPUT INSERTED.Id
@@ -48,7 +47,6 @@ namespace L02P02_2022CP602_2022HZ651.Controllers
 
                             var clienteId = (int)await command.ExecuteScalarAsync();
 
-                            // Insertar Pedido
                             command.CommandText = @"
                                 INSERT INTO pedido_encabezado (id_Cliente, cantidad_libros, total, Estado) 
                                 VALUES (@IdCliente, 0, 0, 'p')";
